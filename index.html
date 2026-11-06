@@ -364,7 +364,7 @@
 
             let matchedResults = [];
 
-            // Performans için öncelikle o anki ayetleri tara, ardından diğer surelere bak
+            // Önce önbellekte olanları tara, eksikleri toplu veya parça parça hızlıca çek
             for (let s of ALL_SURAHS) {
                 try {
                     let ayahsToSearch = [];
@@ -373,6 +373,7 @@
                     } else if (allSurahsAyahsCache[s.id]) {
                         ayahsToSearch = allSurahsAyahsCache[s.id];
                     } else {
+                        // Hızlı veri için api çağrısını sıraya koy
                         const res = await fetch(`https://api.alquran.cloud/v1/surah/${s.id}/tr.diyanet`);
                         const data = await res.json();
                         if (data.code === 200 && data.data.ayahs) {
@@ -392,7 +393,7 @@
                         }
                     });
                 } catch (e) {
-                    // Hata durumunda geç
+                    // Hata durumunda atla
                 }
             }
 
