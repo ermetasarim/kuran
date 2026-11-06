@@ -55,6 +55,17 @@
             </div>
 
             <div class="flex items-center space-x-2">
+                <!-- Üst Navigasyon Arama Kutusu -->
+                <div class="relative hidden sm:block">
+                    <input 
+                        type="text" 
+                        id="header-search-input" 
+                        placeholder="Ayetlerde ara..." 
+                        class="w-36 md:w-48 bg-cream border border-cream-border rounded-xl px-3 py-1.5 text-xs text-theme-text placeholder-theme-muted/70 focus:outline-none focus:border-theme-accent shadow-inner"
+                    >
+                    <button id="header-clear-search" class="absolute right-2 top-1.5 text-theme-muted text-xs hidden">✕</button>
+                </div>
+
                 <button id="view-favorites-btn" onclick="toggleFavoritesView()" class="px-2.5 py-1.5 rounded-xl border border-cream-border text-theme-accent text-xs font-semibold hover:bg-theme-accent hover:text-white transition flex items-center space-x-1 bg-white shadow-2xs active:scale-95">
                     <span>★</span>
                     <span class="hidden sm:inline">Favorilerim</span>
@@ -108,6 +119,10 @@
             <span class="text-base">📜</span>
             <span class="text-[10px] font-semibold">Sureler</span>
         </button>
+        <button onclick="openMobileSearchModal()" class="flex flex-col items-center space-y-0.5 text-theme-accent active:scale-95">
+            <span class="text-base">🔍</span>
+            <span class="text-[10px] font-semibold">Arama</span>
+        </button>
         <button onclick="toggleFavoritesView()" class="flex flex-col items-center space-y-0.5 text-theme-accent active:scale-95">
             <span class="text-base">★</span>
             <span class="text-[10px] font-semibold">Favoriler</span>
@@ -121,6 +136,25 @@
             <span class="text-[10px] font-semibold">Yukarı</span>
         </button>
     </nav>
+
+    <!-- Mobil Arama Modal Penceresi -->
+    <div id="mobile-search-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-start justify-center p-4 pt-16 hidden">
+        <div class="bg-white border border-cream-border rounded-2xl max-w-md w-full p-4 space-y-3 shadow-xl relative text-theme-text">
+            <div class="flex items-center justify-between border-b border-cream-border pb-2">
+                <h3 class="text-theme-accent font-bold text-sm">Ayetlerde Ara</h3>
+                <button onclick="closeMobileSearchModal()" class="text-theme-muted font-bold hover:scale-110 p-1">✕</button>
+            </div>
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="mobile-search-input" 
+                    placeholder="Ayet metninde ara..." 
+                    class="w-full bg-cream border border-cream-border rounded-xl px-3.5 py-2.5 text-xs text-theme-text placeholder-theme-muted/70 focus:outline-none focus:border-theme-accent shadow-inner"
+                >
+            </div>
+            <div id="mobile-search-stats" class="text-[11px] text-theme-muted font-medium"></div>
+        </div>
+    </div>
 
     <!-- Tefsir Modal Penceresi -->
     <div id="tafsir-modal" class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
@@ -274,7 +308,42 @@
             document.getElementById('search-input')?.addEventListener('input', (e) => {
                 handleSearch(e.target.value);
             });
+
+            document.getElementById('header-search-input')?.addEventListener('input', (e) => {
+                handleSearch(e.target.value);
+            });
+
+            document.getElementById('mobile-search-input')?.addEventListener('input', (e) => {
+                handleMobileSearch(e.target.value);
+            });
         });
+
+        function openMobileSearchModal() {
+            document.getElementById('mobile-search-modal')?.classList.remove('hidden');
+            setTimeout(() => document.getElementById('mobile-search-input')?.focus(), 100);
+        }
+
+        function closeMobileSearchModal() {
+            document.getElementById('mobile-search-modal')?.classList.add('hidden');
+        }
+
+        function handleMobileSearch(query) {
+            const stats = document.getElementById('mobile-search-stats');
+            const q = query.trim().toLowerCase();
+
+            if (!q) {
+                stats.textContent = '';
+                const sInfo = ALL_SURAHS.find(s => s.id === currentSurahId);
+                renderAyahs(sInfo, currentAyahs);
+                return;
+            }
+
+            const matched = currentAyahs.filter(a => a.tr.toLowerCase().includes(q));
+            stats.textContent = `"${query}" aramasına uygun ${matched.length} ayet bulundu.`;
+
+            const sInfo = ALL_SURAHS.find(s => s.id === currentSurahId);
+            renderAyahs(sInfo, matched);
+        }
 
         function toggleMobileSidebar() {
             document.getElementById('sidebar')?.classList.toggle('-translate-x-full');
@@ -575,29 +644,26 @@
         }
 
         function handleSearch(query) {
-            const clearBtn = document.getElementById('clear-search');
+            const clearBtn = document.getElementById('header-clear-search');
             const stats = document.getElementById('search-stats');
             const q = query.trim().toLowerCase();
 
             if (!q) {
-                clearBtn.classList.add('hidden');
-                stats.classList.add('hidden');
+                if (clearBtn) clearBtn.classList.add('hidden');
                 const sInfo = ALL_SURAHS.find(s => s.id === currentSurahId);
                 renderAyahs(sInfo, currentAyahs);
                 return;
             }
 
-            clearBtn.classList.remove('hidden');
-            clearBtn.onclick = () => {
-                document.getElementById('search-input').value = '';
-                handleSearch('');
-            };
+            if (clearBtn) {
+                clearBtn.classList.remove('hidden');
+                clearBtn.onclick = () => {
+                    document.getElementById('header-search-input').value = '';
+                    handleSearch('');
+                };
+            }
 
             const matched = currentAyahs.filter(a => a.tr.toLowerCase().includes(q));
-            
-            stats.classList.remove('hidden');
-            stats.textContent = `"${query}" aramasına uygun ${matched.length} ayet bulundu.`;
-
             const sInfo = ALL_SURAHS.find(s => s.id === currentSurahId);
             renderAyahs(sInfo, matched);
         }
