@@ -37,49 +37,45 @@
         @media (max-width: 768px) {
             body { padding-bottom: env(safe-area-inset-bottom); }
         }
+        button, input { touch-action: manipulation; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-cream text-theme-text min-h-screen flex flex-col antialiased transition-colors duration-300">
 
     <!-- Üst Bar (Header Navigation) -->
     <header class="bg-white border-b border-cream-border sticky top-0 z-40 shadow-xs text-theme-text">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between">
             
             <!-- Sol Kısım: Mobil Menü Butonu + Anasayfa & Favorilerim -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <button id="toggle-sidebar-btn" onclick="toggleMobileSidebar()" class="md:hidden p-2.5 rounded-xl bg-cream border border-cream-border text-theme-accent hover:bg-theme-accent hover:text-white transition active:scale-95 shadow-2xs">
+            <div class="flex items-center space-x-1.5 sm:space-x-3">
+                <button id="toggle-sidebar-btn" onclick="toggleMobileSidebar()" class="md:hidden p-2 sm:p-2.5 rounded-xl bg-cream border border-cream-border text-theme-accent hover:bg-theme-accent hover:text-white transition active:scale-95 shadow-2xs" aria-label="Menü">
                     ☰
                 </button>
 
-                <button onclick="goHome()" class="px-3.5 py-2 rounded-xl bg-theme-accent text-white font-semibold text-xs sm:text-sm hover:bg-theme-accent-hover transition flex items-center space-x-1.5 shadow-2xs active:scale-95">
+                <button onclick="goHome()" class="px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-theme-accent text-white font-semibold text-xs sm:text-sm hover:bg-theme-accent-hover transition flex items-center space-x-1 sm:space-x-1.5 shadow-2xs active:scale-95">
                     <span>🏠</span>
                     <span>Anasayfa</span>
                 </button>
 
-                <button id="view-favorites-btn" onclick="toggleFavoritesView()" class="px-3 py-2 rounded-xl border border-cream-border text-theme-accent text-xs sm:text-sm font-semibold hover:bg-theme-accent hover:text-white transition flex items-center space-x-1.5 bg-white shadow-2xs active:scale-95">
+                <button id="view-favorites-btn" onclick="toggleFavoritesView()" class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border border-cream-border text-theme-accent text-xs sm:text-sm font-semibold hover:bg-theme-accent hover:text-white transition flex items-center space-x-1 sm:space-x-1.5 bg-white shadow-2xs active:scale-95">
                     <span>★</span>
-                    <span class="hidden sm:inline">Favorilerim</span>
+                    <span class="inline">Favorilerim</span>
                 </button>
             </div>
 
-            <!-- Sağ Kısım: Arama Yap Kutusu + Font Kontrolü -->
+            <!-- Sağ Kısım: Arama Yap Kutusu -->
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <div class="relative w-40 sm:w-64">
+                <div class="relative w-36 sm:w-64">
                     <input 
                         type="text" 
                         id="global-search-input" 
                         placeholder="Arama Yap..." 
-                        class="w-full bg-cream border border-cream-border rounded-xl px-3 py-1.5 text-xs sm:text-sm text-theme-text placeholder-theme-muted/70 focus:outline-none focus:border-theme-accent shadow-inner pl-8"
+                        class="w-full bg-cream border border-cream-border rounded-xl px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm text-theme-text placeholder-theme-muted/70 focus:outline-none focus:border-theme-accent shadow-inner pl-7 sm:pl-8"
                     >
-                    <span class="absolute left-2.5 top-2 text-xs text-theme-muted">🔍</span>
-                    <button id="clear-global-search" onclick="clearSearch()" class="absolute right-2.5 top-2 text-theme-muted text-xs hidden">✕</button>
-                </div>
-
-                <!-- Font Boyutu Butonları -->
-                <div class="flex items-center space-x-1 bg-cream border border-cream-border rounded-xl p-1">
-                    <button id="decrease-font" onclick="changeFontSize(-1)" class="px-2 py-0.5 text-theme-accent font-bold hover:bg-theme-accent hover:text-white rounded-lg text-xs" title="Yazıyı Küçült">A-</button>
-                    <span class="text-theme-muted text-[11px] hidden sm:inline">Yazı</span>
-                    <button id="increase-font" onclick="changeFontSize(1)" class="px-2 py-0.5 text-theme-accent font-bold hover:bg-theme-accent hover:text-white rounded-lg text-xs" title="Yazıyı Büyüt">A+</button>
+                    <span class="absolute left-2 sm:left-2.5 top-2 text-xs text-theme-muted">🔍</span>
+                    <button id="clear-global-search" onclick="clearSearch()" class="absolute right-2 sm:right-2.5 top-2 text-theme-muted text-xs hidden">✕</button>
                 </div>
             </div>
 
@@ -90,20 +86,20 @@
     <div class="flex-1 max-w-7xl w-full mx-auto flex flex-col md:flex-row relative pb-16 md:pb-0">
 
         <!-- Sol Yan Menü (Sureler Listesi) -->
-        <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-80 bg-white border-r border-cream-border h-full md:h-[calc(100vh-65px)] overflow-y-auto transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col text-theme-text shadow-xl md:shadow-none">
+        <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-50 w-[85%] max-w-xs sm:w-80 bg-white border-r border-cream-border h-full md:h-[calc(100vh-65px)] overflow-y-auto transform -translate-x-full md:translate-x-0 transition-transform duration-300 flex flex-col text-theme-text shadow-2xl md:shadow-none">
             <div class="p-4 border-b border-cream-border sticky top-0 bg-white z-10 space-y-3 shadow-2xs flex items-center justify-between">
                 <div>
-                    <h2 class="font-bold text-theme-accent text-sm">Sure Listesi</h2>
-                    <p class="text-[11px] text-theme-muted">114 Sure</p>
+                    <h2 class="font-bold text-theme-accent text-sm sm:text-base">Sure Listesi (Diyanet Uyumlu)</h2>
+                    <p class="text-[11px] text-theme-muted">114 Sure • Tam Liste</p>
                 </div>
-                <button onclick="toggleMobileSidebar()" class="md:hidden text-theme-muted font-bold p-1">✕</button>
+                <button onclick="toggleMobileSidebar()" class="md:hidden text-theme-muted font-bold p-2 text-lg active:scale-95">✕</button>
             </div>
 
             <div class="p-3 border-b border-cream-border bg-cream/30">
                 <input 
                     type="text" 
                     id="surah-filter-input" 
-                    placeholder="Sure filtrele..." 
+                    placeholder="Sure ara veya filtrele..." 
                     class="w-full bg-white border border-cream-border rounded-xl px-3 py-1.5 text-xs text-theme-text placeholder-theme-muted/70 focus:outline-none focus:border-theme-accent shadow-2xs"
                 >
             </div>
@@ -118,7 +114,7 @@
 
         <!-- Orta Ana Okuma Alanı -->
         <main class="flex-1 p-3 sm:p-6 overflow-y-auto bg-cream">
-            <div id="content-area" class="max-w-3xl mx-auto space-y-5">
+            <div id="content-area" class="max-w-3xl mx-auto space-y-4 sm:space-y-5">
                 <!-- Dinamik Görünüm (Anasayfa / Sure / Favoriler / Arama) -->
             </div>
         </main>
@@ -335,7 +331,7 @@
             { text: "Rabbimiz! Bizi doğru yola ilettikten sonra kalplerimizi eğriltme. Bize katından bir rahmet bağışla. Şüphesiz sen lütfu çok bol olansın.", source: "Âl-i İmrân Suresi, 8. Ayet" },
             { text: "Rabbim! Beni ve soyumdan gelecekleri namazı devamlı kılanlardan eyle. Rabbimiz! Duamı kabul eyle.", source: "İbrâhîm Suresi, 40. Ayet" },
             { text: "Rabbim! Göğsümü genişlet, işimi kolaylaştır, dilimdeki düğümü çöz ki sözümü iyice anlasınlar.", source: "Tâhâ Suresi, 25-28. Ayetler" },
-            { text: "Rabbim! İlmi mi artır.", source: "Tâhâ Suresi, 114. Ayet" },
+            { text: "Rabbim! İlmimi artır.", source: "Tâhâ Suresi, 114. Ayet" },
             { text: "Rabbim! Bana katından temiz bir soy bağışla. Şüphesiz sen duayı hakkıyla işitensin.", source: "Âl-i İmrân Suresi, 38. Ayet" },
             { text: "Rabbimiz! Hesabın görüleceği gün beni, ana-babamı ve bütün müminleri bağışla.", source: "İbrâhîm Suresi, 41. Ayet" },
             { text: "Rabbim! Beni gireceğim yere dürüstlükle sok, çıkacağım yerden de dürüstlükle çıkar ve bana katından destekleyici bir güç ver.", source: "İsrâ Suresi, 80. Ayet" }
@@ -346,7 +342,6 @@
         let favorites = JSON.parse(localStorage.getItem('quran_favs') || '[]');
         let currentAudio = null;
         let currentAudioKey = null;
-        let fontSize = 20; 
         let showingFavs = false;
         let isHomeView = true;
 
@@ -390,75 +385,73 @@
 
         function loadHomeView() {
             isHomeView = true;
-            const headerTitle = document.getElementById('header-surah-title');
-            if (headerTitle) headerTitle.textContent = "Kur'an-ı Kerim Meali";
-            
             const contentArea = document.getElementById('content-area');
             contentArea.innerHTML = `
-                <!-- Mersin 7 Günlük Namaz Vakitleri Kartı -->
-                <div class="bg-white border border-cream-border rounded-2xl p-5 sm:p-6 shadow-xs text-theme-text space-y-4">
+                <!-- Mersin Bugünün Namaz Vakitleri Kartı -->
+                <div class="bg-white border border-cream-border rounded-2xl p-4 sm:p-6 shadow-xs text-theme-text space-y-4">
                     <div class="flex items-center justify-between border-b border-cream-border pb-3">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="text-2xl">🕌</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl sm:text-2xl">🕌</span>
                             <div>
-                                <h3 class="font-bold text-theme-accent text-base sm:text-lg">Mersin Namaz Vakitleri</h3>
-                                <p class="text-[11px] text-theme-muted">7 Günlük Güncel Ezan Vakitleri</p>
+                                <h3 class="font-bold text-theme-accent text-sm sm:text-lg">Mersin Namaz Vakitleri</h3>
+                                <p id="prayer-today-date" class="text-[10px] sm:text-[11px] text-theme-muted">Bugün - Günlük Ezan Vakitleri</p>
                             </div>
                         </div>
-                        <span class="text-xs font-semibold px-3 py-1 bg-cream border border-cream-border rounded-full text-theme-accent">
-                            📍 Mersin
+                        <span class="text-[11px] sm:text-xs font-semibold px-2.5 py-1 bg-cream border border-cream-border rounded-full text-theme-accent flex items-center space-x-1">
+                            <span>📍</span>
+                            <span>Mersin</span>
                         </span>
                     </div>
 
-                    <div id="prayer-times-loading" class="text-center py-6 text-theme-muted text-xs font-semibold space-y-2">
-                        <div class="w-6 h-6 border-2 border-theme-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    <div id="prayer-times-loading" class="text-center py-5 text-theme-muted text-xs font-semibold space-y-2">
+                        <div class="w-5 h-5 border-2 border-theme-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
                         <p>Namaz vakitleri yükleniyor...</p>
                     </div>
 
-                    <div id="prayer-times-container" class="hidden overflow-x-auto pb-2">
-                        <div id="prayer-times-cards" class="flex space-x-3 min-w-max">
-                            <!-- JS ile 7 günlük vakit kartları basılacak -->
+                    <div id="prayer-times-container" class="hidden">
+                        <div id="prayer-times-cards" class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+                            <!-- JS ile bugünün 6 namaz vakti basılacak -->
                         </div>
                     </div>
                 </div>
 
                 <!-- Karşılama Kartı -->
-                <div class="bg-white border border-cream-border rounded-2xl p-8 sm:p-10 text-center shadow-xs space-y-4 text-theme-text">
-                    <div class="w-16 h-16 rounded-full bg-cream border border-cream-border text-theme-accent text-2xl flex items-center justify-center mx-auto shadow-inner">
+                <div class="bg-white border border-cream-border rounded-2xl p-6 sm:p-10 text-center shadow-xs space-y-4 text-theme-text">
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-cream border border-cream-border text-theme-accent text-2xl flex items-center justify-center mx-auto shadow-inner">
                         📖
                     </div>
                     <div class="space-y-2">
-                        <h2 class="text-2xl sm:text-3xl font-bold text-theme-accent tracking-wide">
+                        <h2 class="text-xl sm:text-3xl font-bold text-theme-accent tracking-wide">
                             Kur'an-ı Kerim Meali ve Tefsiri
                         </h2>
-                        <p class="text-sm sm:text-base text-theme-muted max-w-md mx-auto leading-relaxed">
+                        <p class="text-xs sm:text-base text-theme-muted max-w-md mx-auto leading-relaxed">
                             Sol menüden bir sure seçerek okumaya başlayabilir, favorilerinizi kaydedebilir veya tüm Kuran'da arama yapabilirsiniz.
                         </p>
                     </div>
                 </div>
 
                 <!-- Günün Duası Kartı -->
-                <div class="bg-white border border-cream-border rounded-2xl p-6 sm:p-8 shadow-xs text-theme-text space-y-4 relative overflow-hidden">
+                <div class="bg-white border border-cream-border rounded-2xl p-5 sm:p-8 shadow-xs text-theme-text space-y-4 relative overflow-hidden">
                     <div class="flex items-center justify-between border-b border-cream-border pb-3">
-                        <div class="flex items-center space-x-2.5">
-                            <span class="text-2xl">🤲</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xl sm:text-2xl">🤲</span>
                             <div>
-                                <h3 class="font-bold text-theme-accent text-base sm:text-lg">Günün Duası</h3>
-                                <p class="text-[11px] text-theme-muted">Kur'an-ı Kerim'den Hikmetli Dualar</p>
+                                <h3 class="font-bold text-theme-accent text-sm sm:text-lg">Günün Duası</h3>
+                                <p class="text-[10px] sm:text-[11px] text-theme-muted">Kur'an-ı Kerim'den Hikmetli Dualar</p>
                             </div>
                         </div>
-                        <span class="text-xs font-semibold px-3 py-1 bg-cream border border-cream-border rounded-full text-theme-accent">
-                            Her Gün Yeni Dua
+                        <span class="text-[10px] sm:text-xs font-semibold px-2.5 py-1 bg-cream border border-cream-border rounded-full text-theme-accent">
+                            Günün Duası
                         </span>
                     </div>
 
-                    <div id="daily-dua-container" class="bg-cream/50 border-l-4 border-theme-accent p-4 sm:p-5 rounded-r-xl space-y-2">
-                        <p id="daily-dua-text" class="text-sm sm:text-base text-theme-text leading-relaxed font-serif italic">
+                    <div id="daily-dua-container" class="bg-cream/50 border-l-4 border-theme-accent p-3.5 sm:p-5 rounded-r-xl space-y-2">
+                        <p id="daily-dua-text" class="text-xs sm:text-base text-theme-text leading-relaxed font-serif italic">
                             "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru."
                         </p>
                         <div class="flex items-center justify-between pt-2 text-xs text-theme-accent font-bold">
-                            <span id="daily-dua-source">Bakara Suresi, 201. Ayet</span>
-                            <button onclick="getRandomDua()" class="text-theme-muted hover:text-theme-accent text-[11px] flex items-center space-x-1 font-semibold transition active:scale-95">
+                            <span id="daily-dua-source" class="text-[11px] sm:text-xs">Bakara Suresi, 201. Ayet</span>
+                            <button onclick="getRandomDua()" class="text-theme-muted hover:text-theme-accent text-[10px] sm:text-[11px] flex items-center space-x-1 font-semibold transition active:scale-95">
                                 <span>🔄 Başka Dua Göster</span>
                             </button>
                         </div>
@@ -496,41 +489,40 @@
             const loadingEl = document.getElementById('prayer-times-loading');
             const containerEl = document.getElementById('prayer-times-container');
             const cardsEl = document.getElementById('prayer-times-cards');
+            const dateSubEl = document.getElementById('prayer-today-date');
 
             if (!loadingEl || !cardsEl) return;
 
             try {
-                // Mersin Lat/Lng tabanlı Aladhan Kalender API Endpoint (7 günlük)
                 const res = await fetch(`https://api.aladhan.com/v1/calendar?latitude=36.8121&longitude=34.6415&method=13`);
                 const data = await res.json();
 
                 if (data.code === 200 && data.data) {
-                    const today = new Date().getDate();
-                    const weekData = data.data.slice(Math.max(0, today - 1), today + 6);
+                    const todayIndex = new Date().getDate() - 1;
+                    const todayData = data.data[todayIndex] || data.data[0];
+                    const dateStr = todayData.date.gregorian.date;
+                    const timings = todayData.timings;
 
-                    cardsEl.innerHTML = weekData.map((day, idx) => {
-                        const dateStr = day.date.gregorian.date;
-                        const dayName = day.date.gregorian.weekday.en;
-                        const timings = day.timings;
-                        const isToday = idx === 0;
+                    if (dateSubEl) {
+                        dateSubEl.textContent = `Bugün (${dateStr}) - Ezan Vakitleri`;
+                    }
 
-                        return `
-                            <div class="bg-cream ${isToday ? 'border-2 border-theme-accent shadow-xs' : 'border border-cream-border'} rounded-xl p-3 text-center space-y-2 min-w-[130px]">
-                                <div class="border-b border-cream-border pb-1.5">
-                                    <span class="text-[11px] font-bold ${isToday ? 'text-theme-accent' : 'text-theme-text'} block">${isToday ? 'Bugün' : dayName}</span>
-                                    <span class="text-[9px] text-theme-muted block">${dateStr}</span>
-                                </div>
-                                <div class="space-y-1 text-[11px]">
-                                    <div class="flex justify-between text-theme-muted"><span>İmsak:</span> <span class="font-bold text-theme-text">${timings.Fajr.split(' ')[0]}</span></div>
-                                    <div class="flex justify-between text-theme-muted"><span>Güneş:</span> <span class="font-bold text-theme-text">${timings.Sunrise.split(' ')[0]}</span></div>
-                                    <div class="flex justify-between text-theme-muted"><span>Öğle:</span> <span class="font-bold text-theme-text">${timings.Dhuhr.split(' ')[0]}</span></div>
-                                    <div class="flex justify-between text-theme-muted"><span>İkindi:</span> <span class="font-bold text-theme-text">${timings.Asr.split(' ')[0]}</span></div>
-                                    <div class="flex justify-between text-theme-muted"><span>Akşam:</span> <span class="font-bold text-theme-text">${timings.Maghrib.split(' ')[0]}</span></div>
-                                    <div class="flex justify-between text-theme-muted"><span>Yatsı:</span> <span class="font-bold text-theme-text">${timings.Isha.split(' ')[0]}</span></div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
+                    const timesList = [
+                        { name: 'İmsak', time: timings.Fajr.split(' ')[0], icon: '🌅' },
+                        { name: 'Güneş', time: timings.Sunrise.split(' ')[0], icon: '☀️' },
+                        { name: 'Öğle', time: timings.Dhuhr.split(' ')[0], icon: '🌤️' },
+                        { name: 'İkindi', time: timings.Asr.split(' ')[0], icon: '🌥️' },
+                        { name: 'Akşam', time: timings.Maghrib.split(' ')[0], icon: '🌙' },
+                        { name: 'Yatsı', time: timings.Isha.split(' ')[0], icon: '🌌' }
+                    ];
+
+                    cardsEl.innerHTML = timesList.map(t => `
+                        <div class="bg-cream border border-cream-border rounded-xl p-2 sm:p-3 text-center space-y-0.5 shadow-2xs hover:border-theme-accent transition">
+                            <span class="text-sm sm:text-lg block">${t.icon}</span>
+                            <span class="text-[9px] sm:text-[11px] font-bold text-theme-accent block">${t.name}</span>
+                            <span class="text-xs sm:text-sm font-extrabold text-theme-text block">${t.time}</span>
+                        </div>
+                    `).join('');
 
                     loadingEl.classList.add('hidden');
                     containerEl.classList.remove('hidden');
@@ -538,7 +530,7 @@
                     throw new Error("Veri formatı uyumsuz");
                 }
             } catch (err) {
-                loadingEl.innerHTML = `<p class="text-xs text-rose-600 font-semibold">Mersin namaz vakitleri yansıtılamadı.</p>`;
+                loadingEl.innerHTML = `<p class="text-xs text-rose-600 font-semibold">Namaz vakitleri alınamadı.</p>`;
             }
         }
 
@@ -589,18 +581,18 @@
             container.innerHTML = list.map(s => `
                 <button 
                     onclick="selectSurah(${s.id})" 
-                    class="w-full text-left p-3 rounded-xl transition flex items-center justify-between group ${s.id === currentSurahId ? 'bg-cream border border-theme-accent text-theme-accent font-bold shadow-2xs' : 'hover:bg-cream/60 text-theme-text'}"
+                    class="w-full text-left p-2.5 sm:p-3 rounded-xl transition flex items-center justify-between group ${s.id === currentSurahId ? 'bg-cream border border-theme-accent text-theme-accent font-bold shadow-2xs' : 'hover:bg-cream/60 text-theme-text'}"
                 >
-                    <div class="flex items-center space-x-3">
-                        <span class="w-8 h-8 rounded-full bg-cream border border-cream-border text-theme-accent text-xs font-bold flex items-center justify-center shadow-inner">
+                    <div class="flex items-center space-x-2.5 sm:space-x-3">
+                        <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-cream border border-cream-border text-theme-accent text-xs font-bold flex items-center justify-center shadow-inner shrink-0">
                             ${s.id}
                         </span>
                         <div>
-                            <div class="text-[1.05rem] font-semibold">${s.name} Suresi</div>
-                            <div class="text-[11px] text-theme-muted">${s.meaning}</div>
+                            <div class="text-[0.95rem] sm:text-[1.05rem] font-semibold">${s.name} Suresi</div>
+                            <div class="text-[10px] sm:text-[11px] text-theme-muted">${s.meaning}</div>
                         </div>
                     </div>
-                    <span class="text-[11px] text-theme-muted font-medium">${s.count} Ayet</span>
+                    <span class="text-[10px] sm:text-[11px] text-theme-muted font-medium">${s.count} Ayet</span>
                 </button>
             `).join('');
         }
@@ -635,9 +627,6 @@
             const contentArea = document.getElementById('content-area');
             const surahInfo = ALL_SURAHS.find(s => s.id === id);
 
-            const headerTitle = document.getElementById('header-surah-title');
-            if (headerTitle) headerTitle.textContent = `${surahInfo.name} Suresi`;
-
             contentArea.innerHTML = `
                 <div class="text-center py-16 space-y-3">
                     <div class="w-8 h-8 border-2 border-theme-accent border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -650,10 +639,17 @@
                 const data = await res.json();
 
                 if (data.code === 200 && data.data.ayahs) {
-                    currentAyahs = data.data.ayahs.map(a => ({
-                        num: a.numberInSurah,
-                        tr: a.text
-                    }));
+                    // Ayetlerin mükerrer/tekrar eden kayıtlarını önlemek için Map kullanımı
+                    const uniqueAyahsMap = new Map();
+                    data.data.ayahs.forEach(a => {
+                        if (!uniqueAyahsMap.has(a.numberInSurah)) {
+                            uniqueAyahsMap.set(a.numberInSurah, {
+                                num: a.numberInSurah,
+                                tr: a.text
+                            });
+                        }
+                    });
+                    currentAyahs = Array.from(uniqueAyahsMap.values());
                     renderAyahs(surahInfo, currentAyahs);
                 } else {
                     throw new Error("Veri Alınamadı");
@@ -670,12 +666,22 @@
         function renderAyahs(surahInfo, ayahs) {
             const contentArea = document.getElementById('content-area');
             
+            // Çift basımı önlemek için ayet listesini ayet numarasına göre Benzersizleştir (Deduplicate)
+            const seenNumbers = new Set();
+            const deduplicatedAyahs = ayahs.filter(a => {
+                if (seenNumbers.has(a.num)) {
+                    return false;
+                }
+                seenNumbers.add(a.num);
+                return true;
+            });
+            
             let html = `
-                <div class="bg-white border border-cream-border rounded-2xl p-5 sm:p-6 text-center shadow-xs text-theme-text">
+                <div class="bg-white border border-cream-border rounded-2xl p-4 sm:p-6 text-center shadow-xs text-theme-text">
                     <span class="inline-block px-3 py-1 bg-cream border border-cream-border rounded-full text-xs font-semibold text-theme-accent mb-2">
                         Toplam ${surahInfo.count} Ayet
                     </span>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-theme-accent tracking-wide">
+                    <h2 class="text-xl sm:text-3xl font-bold text-theme-accent tracking-wide">
                         ${surahInfo.name} Suresi
                     </h2>
                 </div>
@@ -683,8 +689,8 @@
 
             if (surahInfo.id !== 9) {
                 html += `
-                    <div class="text-center my-4 py-3 px-4 bg-white/80 border-y border-cream-border rounded-xl shadow-2xs">
-                        <p class="text-base sm:text-lg text-theme-accent font-semibold tracking-wide">
+                    <div class="text-center my-3 py-2.5 px-4 bg-white/80 border-y border-cream-border rounded-xl shadow-2xs">
+                        <p class="text-sm sm:text-lg text-theme-accent font-semibold tracking-wide">
                             Rahmân ve Rahîm olan Allah'ın adıyla
                         </p>
                     </div>
@@ -693,7 +699,7 @@
 
             html += `<div class="space-y-4">`;
 
-            ayahs.forEach(a => {
+            deduplicatedAyahs.forEach(a => {
                 const isFav = favorites.some(f => f.surahId === surahInfo.id && f.ayahNum === a.num);
 
                 html += `
@@ -703,7 +709,7 @@
                                 <span class="w-7 h-7 rounded-full bg-cream border border-cream-border text-theme-accent font-bold flex items-center justify-center text-xs shadow-2xs">
                                     ${a.num}
                                 </span>
-                                <span class="text-theme-accent font-semibold text-sm">${surahInfo.name} Suresi, ${a.num}. Ayet</span>
+                                <span class="text-theme-accent font-semibold text-xs sm:text-sm">${surahInfo.name} Suresi, ${a.num}. Ayet</span>
                             </div>
 
                             <div class="flex items-center space-x-1.5 flex-wrap gap-1">
@@ -719,9 +725,9 @@
                             </div>
                         </div>
 
-                        <div class="bg-cream/50 border-l-4 border-theme-accent p-4 rounded-r-xl text-theme-text leading-relaxed">
-                            <span class="block text-xs text-theme-muted mb-1 font-semibold">Türkçe Meali</span>
-                            <p class="meal-text transition-all text-theme-text leading-relaxed" style="font-size: ${fontSize}px">
+                        <div class="bg-cream/50 border-l-4 border-theme-accent p-3.5 sm:p-4 rounded-r-xl text-theme-text leading-relaxed">
+                            <span class="block text-[11px] text-theme-muted mb-1 font-semibold">Türkçe Meali</span>
+                            <p class="meal-text transition-all text-theme-text leading-relaxed text-sm sm:text-base">
                                 ${a.tr}
                             </p>
                         </div>
@@ -805,8 +811,6 @@
 
             if (showingFavs) {
                 btn?.classList.add('bg-theme-accent', 'text-white');
-                const headerTitle = document.getElementById('header-surah-title');
-                if (headerTitle) headerTitle.textContent = "Favori Ayetlerim";
                 renderFavoritesView();
             } else {
                 btn?.classList.remove('bg-theme-accent', 'text-white');
@@ -842,7 +846,7 @@
                             <span class="text-theme-accent font-bold text-sm">${f.surahName} Suresi, ${f.ayahNum}. Ayet</span>
                             <button onclick="toggleFavorite(${f.surahId}, ${f.ayahNum})" class="px-2.5 py-1.5 rounded-xl bg-theme-accent text-white font-bold custom-btn-text transition shadow-2xs active:scale-95">★ Favorilerden Çıkar</button>
                         </div>
-                        <div class="bg-cream/50 border-l-4 border-theme-accent p-4 rounded-r-xl text-theme-text leading-relaxed" style="font-size: ${fontSize}px">
+                        <div class="bg-cream/50 border-l-4 border-theme-accent p-4 rounded-r-xl text-theme-text text-sm sm:text-base leading-relaxed">
                             ${f.trText}
                         </div>
                     </div>
@@ -914,13 +918,6 @@
             const searchInput = document.getElementById('global-search-input');
             if (searchInput) searchInput.value = '';
             handleGlobalSearch('');
-        }
-
-        function changeFontSize(delta) {
-            fontSize = Math.max(14, Math.min(30, fontSize + delta));
-            document.querySelectorAll('.meal-text').forEach(el => {
-                el.style.fontSize = `${fontSize}px`;
-            });
         }
     </script>
 </body>
